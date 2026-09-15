@@ -1,0 +1,85 @@
+name: rom
+version: 0.1.0
+spec: '0.1'
+kind: ip
+lang:
+- bsv
+- bh
+identity:
+  slug: rom-tapeout-bsv
+  display_name: Boot ROM
+  summary: Read-only memory with a build-time image, answering one cycle after 
+    the request like the ICS55 ROM macro.
+  category: memory
+  subcategories:
+  - rom
+  ip_family: rom
+  integration_profile:
+  - apb4-slave
+  maturity: simulated
+contract:
+  version: 1
+  ctrl:
+    shape: flat
+    aw: 16
+    dw: 32
+params:
+  # 字数。逻辑实现是一张查表，几百字以内合算；ICS55 的 ROM 宏最少 256 字，更大的换宏（本次不做）
+  words:
+    type: int
+    default: 64
+    range:
+    - 4
+    - 256
+emit:
+- kind: bsv
+  package: Rom
+  module: mkRom
+  config_type: RomCfg
+  interface: RomIfc
+  # 宏的形状：下一拍才出数，逻辑实现也照这个答
+  ctrl_slow: mem
+  slow_when: true
+- kind: verilog-flat
+  bus: apb4
+deps:
+  hwcore: ^0.1
+  amba: ^0.1
+area:
+  base:
+    per: words
+    points:
+      '4': 63.56
+      '64': 67.2
+      '256': 66.92
+  margin: 0.05
+  model: points-additive
+  error:
+    bound: 0.05
+    sign: over
+    note: first measured by ran recal --init at the range ends and the default 
+      of each parameter; the margin is the worst underestimate at 2 off-grid 
+      probes
+  measured:
+  - at:
+      words: 4
+    um2: 63.56
+  - at:
+      words: 64
+    um2: 67.2
+  - at:
+      words: 256
+    um2: 66.92
+  - at:
+      words: 34
+    um2: 68.6
+  - at:
+      words: 160
+    um2: 68.88
+  corner:
+    tool: ecc
+    pdk: ics55
+    freq_mhz: 100
+    measured: '2026-09-15'
+    toolchain: bsc 2026.01 · yosys 0.68+195 · ecc 0.1.0a11
+    gen_digest: sha256:0f816d1165011b44

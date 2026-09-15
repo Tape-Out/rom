@@ -1,0 +1,9 @@
+package RomImage where
+
+-- 由 tools/romimage.py 从 image/boot.hex 生成，勿手改。
+
+image :: List (Bit 32)
+image =
+  Cons 0x800002B7 (
+  Cons 0x00028067 (
+  Nil))

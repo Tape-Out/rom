@@ -1,0 +1,18 @@
+package RomTable where
+
+-- 镜像是一个列表，ROM 的字数是数值类型。镜像比字数长就在编译期报出来，短了补零：
+-- 烧进去的内容与存储的大小在类型里对齐，不必等仿真读出一个错位的字才发现。
+
+import qualified List
+import qualified Vector
+
+-- 叫 fill 不叫 table：table 是 Verilog 保留字，BSV 那边调不了
+fill :: List (Bit 32) -> Vector.Vector n (Bit 32)
+fill img =
+  let size :: Integer
+      size = valueOf n
+      len = List.length img
+  in  if len > size
+      then error ("ROM: the image has " +++ integerToString len +++ " words, the ROM only "
+                  +++ integerToString size)
+      else Vector.genWith (\ i -> if i < len then (List.!!) img i else 0)
