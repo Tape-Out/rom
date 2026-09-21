@@ -1,9 +1,9 @@
-"""把一个十六进制镜像（一行一个 32 位字）写成 bsv/RomImage.bs。
+"""把一个十六进制镜像（一行一个 32 位字）写成 hwsrc/RomImage.bs。
 
 镜像是构建时的常数，进 BH 包之后由 RomTable.fill 在编译期补零、查长度；换镜像就是重跑这个脚本，
 生成产物的摘要随之变，价目表要重测，这正是想要的：换镜像就是换了逻辑。
 
-`python3 tools/romimage.py image/boot.hex > bsv/RomImage.bs`
+`python3 tools/romimage.py image/boot.hex > hwsrc/RomImage.bs`
 """
 import pathlib
 import sys

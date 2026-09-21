@@ -37,7 +37,7 @@ verdict = (f"every word of a {words}-word pattern reads back one cycle after its
 
 TEMPLATE = r'''package Rom@L@Tb;
 
-// 由 tb/mkromtb.py 生成，勿手改。这一点：words=@WORDS@
+// 由 htest/mkromtb.py 生成，勿手改。这一点：words=@WORDS@
 
 import Vector::*;
 import StmtFSM::*;
